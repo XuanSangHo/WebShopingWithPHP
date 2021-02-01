@@ -180,7 +180,23 @@
 		// san pham new
 		public function getproduct_new()
 		{
-			$query = "select * from tbl_product order by productid desc limit 4"; // gioi han 4  product
+			$sp_tungtrang = 4;
+			if(!isset($_GET['trang'])){
+				$trang = 1;
+			} else {
+				$trang = $_GET['trang'];
+			}
+
+			$tung_trang = ($trang-1)*$sp_tungtrang;
+			$query = "select * from tbl_product order by productid desc limit $tung_trang, $sp_tungtrang	 "; // gioi han 4  product
+			$result = $this->db->select($query);
+			return $result;	
+		}
+
+		// phan trang
+		public function get_all_product()
+		{
+			$query = "select * from tbl_product"; // gioi han 4  product
 			$result = $this->db->select($query);
 			return $result;	
 		}
@@ -283,9 +299,8 @@
 			$file_ext = strtolower(end($div));
 			$unique_image = substr(md5(time()), 0, 10).'.'.$file_ext;
 			$uploaded_image = "uploads/".$unique_image;
+			
 			// return file_name
-
-
 
 			if($sliderName == "" || $type == "" || $file_name == "" )
 			{
@@ -322,14 +337,10 @@
 			return $result;
 		}
 
-		// update type slider
-		public function update_type_slider($id, $type)
-		{
-			$type = mysqli_real_escape_string($this->db->link, $type);
-			$query = "update tbl_slider set type = '$type' where sliderid = '$id'";
-			$result = $this->db->update($query);
-			return $result;
-		}
+		// update type slider public function update_type_slider($id, $type) { $type
+= mysqli_real_escape_string($this->db->link, $type); $query = "update
+tbl_slider set type = '$type' where sliderid = '$id'"; $result =
+$this->db->update($query); return $result; }
 
 		// delete Slide
 		public function del_slider($id)
